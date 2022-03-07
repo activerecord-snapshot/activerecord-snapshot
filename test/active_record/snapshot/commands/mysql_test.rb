@@ -15,14 +15,14 @@ module ActiveRecord::Snapshot
             --user=bearnardo \\
             --password=secret \\
             --host=Jon\\ Stewart \\
-            --no-data mainframe > baz
+            --no-data --single-transaction --no-tablespaces --set-gtid-purged=OFF mainframe > baz
         SH
         Object.any_instance.expects(:system).with(<<~SH).once
           nice mysqldump \\
             --user=bearnardo \\
             --password=secret \\
             --host=Jon\\ Stewart \\
-            --quick mainframe foo bar >> baz
+            --quick --single-transaction --no-tablespaces --set-gtid-purged=OFF mainframe foo bar >> baz
         SH
 
         MySQL.dump(tables: tables, output: file)
@@ -39,14 +39,14 @@ module ActiveRecord::Snapshot
               --user=bearnardo \\
                \\
               --host=Jon\\ Stewart \\
-              --no-data mainframe > baz
+              --no-data --single-transaction --no-tablespaces --set-gtid-purged=OFF mainframe > baz
           SH
           Object.any_instance.expects(:system).with(<<~SH).once
             nice mysqldump \\
               --user=bearnardo \\
                \\
               --host=Jon\\ Stewart \\
-              --quick mainframe foo bar >> baz
+              --quick --single-transaction --no-tablespaces --set-gtid-purged=OFF mainframe foo bar >> baz
           SH
 
           MySQL.dump(tables: tables, output: file)

@@ -8,8 +8,10 @@ module ActiveRecord
       end
 
       def dump(tables:, output:)
-        dump_command("--no-data --set-gtid-purged=OFF #{database} > #{output}") &&
-          dump_command("--quick --set-gtid-purged=OFF #{database} #{tables.join(" ")} >> #{output}")
+        # the --no-tablespaces and --single-transaction flags are necessary to dump a db
+        # containing SQL view queries and tablespace metadata
+        dump_command("--no-data --single-transaction --no-tablespaces --set-gtid-purged=OFF #{database} > #{output}") &&
+          dump_command("--quick --single-transaction --no-tablespaces --set-gtid-purged=OFF #{database} #{tables.join(" ")} >> #{output}")
       end
 
       def self.import(*args)
