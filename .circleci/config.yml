@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    working_directory: ~/activerecord-snapshot
+    docker:
+      - image: circleci/ruby:2.6
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
+    steps:
+      - checkout
+
+      # Restore bundle cache
+      - restore_cache:
+          keys:
+            - activerecord-snapshot-bundle-{{ checksum "Gemfile.lock" }}
+            - activerecord-snapshot-bundle-
+
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+
+      # Store bundle cache
+      - save_cache:
+          key: activerecord-snapshot-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      # Run test suite in parallel
+      - run:
+          name: Run test suite in parallel
+          command: |
+            bundle exec rake test test/*
+      # Save test results for timing analysis
+      - store_test_results:
+          path: test_results
+      - store_artifacts:
+          path: test_results
