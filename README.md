@@ -1,3 +1,6 @@
+## This repository is unmaintained.
+
+
 # ActiveRecord::Snapshot
 
 [![Build Status](https://api.travis-ci.org/coverhound/activerecord-snapshot.svg?branch=master)](https://travis-ci.org/coverhound/activerecord-snapshot)
